@@ -1,0 +1,1 @@
+Este proyecto tiene la finalidad de recrear el juego "Bop it" en un dispositivo móvil haciendo uso de sus sensores especiales

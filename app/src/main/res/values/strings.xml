@@ -1,0 +1,21 @@
+<resources>
+    //General
+    <string name="app_name">My_Bop_It_App</string>
+    <string name="my_app_name">Bop it mobile</string>
+    <string name="author">Samuel Quiroz </string>
+
+    //Activity names
+    <string name="act_name_About">Acerca de </string>
+    <string name="desc_About">Esta aplicación tiene como finalidad recrear el juego "Bop it" en un dispositivo movil, haciendo uso de los sensores característicos de estos mismo. </string>
+    <string name="act_name_Prefences">Preferencias </string>
+    <string name="act_name_Play">Jugar </string>
+
+    //Description for images
+    <string name="desc_logo_Utal">Logo de la universidad de Talca </string>
+    <string name="desc_logo_IDVRV">Logo de Ingeniería en desarrollo de videojuegos y realidad virtual </string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    //Configuraciones
+    <string name="messages_header">Inicio</string>
+    <string name="time">Tiempo en segundos</string>
+</resources>

@@ -3,9 +3,9 @@
     <PreferenceCategory app:title="@string/messages_header">
         <ListPreference
             app:defaultValue="3"
-            app:entries="@array/times"
-            app:entryValues="@array/times"
-            app:key="time_spash_screen"
+            app:entries="@array/time"
+            app:entryValues="@array/time"
+            app:key="time_spash"
             app:title="@string/time"
             app:useSimpleSummaryProvider="true" />
 

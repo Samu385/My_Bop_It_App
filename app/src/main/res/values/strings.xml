@@ -6,7 +6,7 @@
 
     //Activity names
     <string name="act_name_About">Acerca de </string>
-    <string name="desc_About">Esta aplicación tiene como finalidad recrear el juego "Bop it" en un dispositivo movil, haciendo uso de los sensores característicos de estos mismo. </string>
+    <string name="desc_About">Esta aplicación fue desarrollada por Samuel Quiroz y tiene como finalidad recrear el juego "Bop it" en un dispositivo movil, haciendo uso de los sensores característicos de estos mismo. </string>
     <string name="act_name_Prefences">Preferencias </string>
     <string name="act_name_Play">Jugar </string>
 

@@ -18,4 +18,9 @@
     //Configuraciones
     <string name="messages_header">Inicio</string>
     <string name="time">Tiempo en segundos</string>
+
+    //Jugar
+    <string name="win">Ganar</string>
+    <string name="lose">Perder</string>
+    <string name="back">Salir</string>
 </resources>

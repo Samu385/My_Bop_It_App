@@ -1,16 +1,8 @@
 Desarrollador: Samuel Quiroz.
 
-Este proyecto corresponde al laboratorio número de 1 del ramo "Programación para dispositivos móbolies", el cuál pedría crear una aplicacíon en android estudio usando el lenguaje de programación Kotlin.
-
-Las pantallas que debía contener son:
-	Tener una pantalla de Bienvenida.
-	Tener una pantalla de Home.
-	Tener una pantalla de About.
-	Tener una pantalla de Preferences.
-	
-
-La finalidad de esta serie de laboratorios será recrear el juego "Bop it" en un dispositivo móvil haciendo uso de sus sensores especiales entendiendo como funcionan y cómo implementarlos en trabajos futuros.
+Esta es la segunda vesión de "My bop it app" la cuál implementa el uso de sonidos en la pantalla de juego, para poder llevarlos acabo se hizo uso de "Media player", que como su nombre indican reproducen sonidos. Se agregó un música de fondo, la cual aumenta dependiendo del tiempo que haya pasado en la actividad, a su vez se agregaron los botones de victoria y derrota la cuales reproducen susu sonidos correspondientes.
 
 Links:
-Video: https://youtu.be/vZ4uwkVDknM
-APK: https://drive.google.com/drive/folders/1hMNmQ2kMFMmyeOEITJyRZAa8by8hADkO?usp=sharing
+Video: https://youtu.be/7JU1W4U99l4
+APK: https://drive.google.com/drive/folders/1Y5uaGSJ3QROtVFkzHaLOEsmk1JtIMWzT?usp=sharing
+

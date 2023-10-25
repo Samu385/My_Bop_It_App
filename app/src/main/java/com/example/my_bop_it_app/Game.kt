@@ -62,7 +62,7 @@ class Game : AppCompatActivity() {
 
 
     }
-
+    //Incrementa la velocidad de la música de fondo
     private val incrementSpeedRunnable = object : Runnable {
         override fun run() {
             if (currentSpeed + speedIncrement <= maxSpeed) { // Límite de velocidad

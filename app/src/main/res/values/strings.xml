@@ -23,4 +23,17 @@
     <string name="win">Ganar</string>
     <string name="lose">Perder</string>
     <string name="back">Salir</string>
+    <string name="Lose_title">Perdiste</string>
+    <string name="reset">Reiniciar</string>
+    <string name="myScore_text">Mi puntaje</string>
+    <string name="bestScore_text">Mejor puntaje</string>
+
+    //Acciones
+    <string name="Shake_title">Agitar</string>
+    <string name="Swipe_title">Deslizar</string>
+    <string name="Fling_title">Corta</string>
+    <string name="Tap_title">Toca</string>
+    <string name="LongTap_title">Matén presionado</string>
+
+
 </resources>

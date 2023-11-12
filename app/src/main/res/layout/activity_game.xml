@@ -45,8 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
-        android:text="@string/Swipe_title"
-        android:textSize="34sp"
+        android:text="@string/Fling_title"
+        android:textColor="@color/black"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,6 +60,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="185dp"
         android:text="aa"
+        android:textColor="@color/black"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,10 +80,11 @@
         android:id="@+id/ScoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="130dp"
+        android:layout_marginStart="100dp"
         android:layout_marginBottom="120dp"
         android:text="@string/myScore_text"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -89,10 +92,11 @@
         android:id="@+id/ScoreValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="145dp"
+        android:layout_marginEnd="80dp"
         android:layout_marginBottom="120dp"
         android:text="213"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -17,6 +17,7 @@
 
     //Configuraciones
     <string name="messages_header">Inicio</string>
+    <string name="difficulty_header">Dificultad</string>
     <string name="time">Tiempo en segundos</string>
 
     //Jugar

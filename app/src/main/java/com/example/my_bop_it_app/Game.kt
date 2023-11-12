@@ -1,6 +1,8 @@
 package com.example.my_bop_it_app
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,6 +17,8 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.preference.PreferenceManager
 import java.util.Random
 
 class Game : AppCompatActivity(), SensorEventListener {
@@ -22,15 +26,17 @@ class Game : AppCompatActivity(), SensorEventListener {
     private lateinit var paramsBGMusic :PlaybackParams
     private lateinit var mediaPlayerWin: MediaPlayer
     private lateinit var mediaPlayerLose: MediaPlayer
-
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var preferencesEditor: Editor
     private var currentAction:Actions = Actions.Tap
 
     private val handler = Handler(Looper.getMainLooper())
     private val handlerActionsTimer = Handler(Looper.getMainLooper())
+    private val handlerDetectLose = Handler(Looper.getMainLooper())
     private var minSpeed = 0.8f
     private var currentSpeed = 0.8f
     private val speedIncrement = 0.1f
-    private val maxSpeed = 1.3f
+    private val maxSpeed = 1.4f
     private lateinit var textAction:TextView
     private lateinit var textTimerAction:TextView
 
@@ -38,25 +44,37 @@ class Game : AppCompatActivity(), SensorEventListener {
     private lateinit var myScoreText:TextView
 
     private var currentTimeActions =0.0f
-    private val maxTimeActions =5.0f
+    private var maxTimeActions = 7.0f
+    private var decrementTimeActions = 0.2f
+    private var totalMaxTimeActions = 15.0f
+    private var minTimeActions = 3.0f
     private val incrementToTimerActions =0.1f
     private val TimeToIncrmentTimerActions = 100L
 
     private lateinit var gestureDetector: GestureDetector
-    private val speedIncrementDelay = 1000L
+    private val speedIncrementDelay = 5000L
 
     private var sensorManager: SensorManager? = null
     private var lastUpdate: Long = 0
     private val SHAKE_THRESHOLD = 800
 
     private var myScore = 0;
+    private var maxScore = 0;
     private var lost = false
+    private var canDetectLose = true
+    private val timeToDetectLose = 1500L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        preferencesEditor = sharedPreferences.edit()
+        updateDifficulty()
         lost = false
+
         //Música y sonidos
+        maxTimeActions = totalMaxTimeActions
         currentTimeActions = maxTimeActions
         mediaPlayer = MediaPlayer.create(this, R.raw.bg)
         currentSpeed = minSpeed
@@ -81,31 +99,32 @@ class Game : AppCompatActivity(), SensorEventListener {
         val losebtn = findViewById<Button>(R.id.loseGameAC_btn)
         val resetbtn = findViewById<Button>(R.id.reset_btn)
 
-        backbtn.setOnClickListener(){
+        backbtn.setOnClickListener{
             val nextPage = Intent(this, HomeActivity::class.java)
             finish()
             startActivity(nextPage)
         }
         mediaPlayerWin= MediaPlayer.create(this, R.raw.win)
-        winbtn.setOnClickListener(){
+        winbtn.setOnClickListener{
             mediaPlayerWin.start()
         }
         mediaPlayerLose= MediaPlayer.create(this, R.raw.lose)
-        losebtn.setOnClickListener(){
+        losebtn.setOnClickListener{
             mediaPlayerLose.start()
         }
-        resetbtn.setOnClickListener(){
-            Reset()
+        resetbtn.setOnClickListener{
+            reset()
         }
 
 
-        textTimerAction = findViewById<TextView>(R.id.TimerActions)
-        textAction = findViewById<TextView>(R.id.ActionToDo)
-        BestScoreText = findViewById<TextView>(R.id.BestScoreValue)
-        myScoreText = findViewById<TextView>(R.id.ScoreValue)
+        textTimerAction = findViewById(R.id.TimerActions)
+        textAction = findViewById(R.id.ActionToDo)
+        BestScoreText = findViewById(R.id.BestScoreValue)
+        myScoreText = findViewById(R.id.ScoreValue)
 
-        currentAction = GetRandomAction()
-        UpdateTextAction()
+        currentAction = getRandomAction()
+
+        updateTextAction()
     }
     private val IncrementMusicSpeed = object : Runnable {
         override fun run() {
@@ -128,16 +147,35 @@ class Game : AppCompatActivity(), SensorEventListener {
                 handlerActionsTimer.postDelayed(this, TimeToIncrmentTimerActions)
             }else{
 
-                Lose()
-                //Perder por tiempo
-                //textAction.text = this.getString(R.string.Swipe_title)
+                endGame()
             }
         }
     }
-    private fun GetRandomAction():Actions {
+    private val DetectLose = object : Runnable {
+        override fun run() {
+            canDetectLose = true
+        }
+    }
+    private fun updateDifficulty(){
+
+        val difficultyString = sharedPreferences.getString("difficulty", "1.0")
+        val difficulty = difficultyString?.toFloat() ?: 1.0f
+        val maxScoreStr = "max_score$difficultyString"
+        //Toast.makeText(this, maxScoreStr,Toast.LENGTH_SHORT).show()
+        maxScore = sharedPreferences.getInt(maxScoreStr,0)
+
+        totalMaxTimeActions /= difficulty
+        decrementTimeActions *= difficulty
+        minTimeActions /= difficulty
+    }
+    private fun getRandomAction():Actions {
         val random = Random()
         val values = Actions.values()
-        return values[random.nextInt(values.size)]
+        var newAction = values[random.nextInt(values.size)]
+        while(newAction == currentAction){
+            newAction = values[random.nextInt(values.size)]
+        }
+        return newAction
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -162,49 +200,92 @@ class Game : AppCompatActivity(), SensorEventListener {
             SensorManager.SENSOR_DELAY_NORMAL
         )
     }
-    fun UpdateTextAction(){
-        if(currentAction == Actions.Shake){
-            textAction.text = this.getString(R.string.Shake_title)
-        }else if(currentAction == Actions.Tap){
-            textAction.text = this.getString(R.string.Tap_title)
-        }else if(currentAction == Actions.LongTap){
-            textAction.text = this.getString(R.string.LongTap_title)
+    private fun updateTextAction(){
+        when (currentAction) {
+            Actions.Cut -> {
+                textAction.text = this.getString(R.string.Fling_title)
+            }
+            Actions.Shake -> {
+                textAction.text = this.getString(R.string.Shake_title)
+            }
+            Actions.Tap -> {
+                textAction.text = this.getString(R.string.Tap_title)
+            }
+            Actions.LongTap -> {
+                textAction.text = this.getString(R.string.LongTap_title)
+            }
         }
         myScoreText.text = myScore.toString()
+        textTimerAction.text = String.format("%.1f",currentTimeActions)
+        BestScoreText.text = maxScore.toString()
     }
-    fun Lose(){
-        mediaPlayer.stop()
-        mediaPlayerLose.start()
-        lost = true
+    private fun endGame(){
+        if(updateMaxScore()){
+            win()
+        }else{
+            lose()
+        }
+
     }
-    fun Win(){
+    private fun lose(){
+        if(canDetectLose){
+            maxTimeActions = totalMaxTimeActions
+            mediaPlayer.pause()
+            mediaPlayerLose.start()
+            lost = true
+            currentTimeActions  = 0.0f
+        }
+    }
+    private fun win(){
+        maxTimeActions = totalMaxTimeActions
         mediaPlayer.pause()
         mediaPlayerWin.start()
+        lost = true
+        currentTimeActions  = 0.0f
     }
-    fun Reset(){
+    private fun reset(){
+        maxTimeActions = totalMaxTimeActions
         currentSpeed = minSpeed
         //val playbackParams = PlaybackParams()
-        //playbackParams.speed = minSpeed
-        //mediaPlayer.playbackParams = playbackParams
-        //mediaPlayer.start()
-        currentTimeActions = maxTimeActions
-        currentAction = GetRandomAction()
-        paramsBGMusic.speed = currentSpeed
+        paramsBGMusic.speed = minSpeed
         mediaPlayer.playbackParams = paramsBGMusic
-
-        UpdateTextAction()
+        currentTimeActions = maxTimeActions
+        currentAction = getRandomAction()
+        myScore = 0
+        handler.removeCallbacks(IncrementMusicSpeed)
+        handler.postDelayed(IncrementMusicSpeed, speedIncrementDelay)
+        mediaPlayer.seekTo(0)
+        mediaPlayer.start()
+        updateTextAction()
         if(lost){
-            handler.postDelayed(IncrementMusicSpeed, speedIncrementDelay)
+
             handlerActionsTimer.postDelayed(IncrementTimerActions, TimeToIncrmentTimerActions)
             lost = false;
         }
-
     }
-    fun CorrectAction(){
+    private fun correctAction(){
+        if(maxTimeActions - decrementTimeActions >= minTimeActions){
+            maxTimeActions -= decrementTimeActions
+        }
         currentTimeActions = maxTimeActions
-        currentAction = GetRandomAction()
-        UpdateTextAction()
+        currentAction = getRandomAction()
         myScore++
+        canDetectLose = false
+        handlerDetectLose.postDelayed(DetectLose, timeToDetectLose)
+
+
+        updateTextAction()
+    }
+    private fun updateMaxScore():Boolean{
+        if(myScore > maxScore){
+            val difficultyString = sharedPreferences.getString("difficulty", "1.0")
+            preferencesEditor.putInt("max_score$difficultyString", myScore)
+            preferencesEditor.apply()
+            maxScore = myScore
+            Toast.makeText(this, "Nuevo puntaje máixmo", Toast.LENGTH_SHORT).show()
+            return true
+        }
+        return false
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         gestureDetector.onTouchEvent(event)
@@ -217,40 +298,40 @@ class Game : AppCompatActivity(), SensorEventListener {
             velocityX: Float,
             velocityY: Float
         ): Boolean {
-            if(velocityY> velocityX){
-                //if(currentAction != Actions.Fling){
-                //    Lose()
-                //}else{
-                //    CorrectAction()
-                    //Toast.makeText(this@Game, "Evento onFling", Toast.LENGTH_SHORT).show()
-                //}
+            if(currentAction != Actions.Cut){
+                endGame()
+            }else{
+                correctAction()
             }
-
             return super.onFling(e1, e2, velocityX, velocityY)
         }
-
         override fun onLongPress(e: MotionEvent) {
             super.onLongPress(e)
             if(currentAction != Actions.LongTap){
-                Lose()
+                endGame()
             }else{
-                CorrectAction()
+                correctAction()
             }
+
         }
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
-            return super.onSingleTapUp(e)
+
             if(currentAction != Actions.Tap){
-                Lose()
+                lose()
             }else{
-                CorrectAction()
+                correctAction()
             }
+
+            return super.onSingleTapUp(e)
         }
+
     }
     enum class Actions {
         Shake,
         Tap,
-        LongTap
+        LongTap,
+        Cut
     }
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
@@ -268,12 +349,12 @@ class Game : AppCompatActivity(), SensorEventListener {
 
                 if (speed > SHAKE_THRESHOLD) {
                     if(currentAction != Actions.Shake){
-                        Lose()
+                        endGame()
                     }else{
-                        CorrectAction()
-                        //Toast.makeText(this, "Agitar", Toast.LENGTH_SHORT).show()
+                        correctAction()
                     }
                 }
+
 
                 lastX = x
                 lastY = y

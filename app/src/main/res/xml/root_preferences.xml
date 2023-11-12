@@ -1,12 +1,20 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/messages_header">
         <ListPreference
             app:defaultValue="3"
             app:entries="@array/time"
             app:entryValues="@array/time"
-            app:key="time_spash"
+            app:key="time_splash"
             app:title="@string/time"
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/difficulty_names"
+            app:entryValues="@array/difficulty_values"
+            app:key="difficulty"
+            app:title="@string/difficulty_header"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>

@@ -1,8 +1,7 @@
 Desarrollador: Samuel Quiroz.
-
-Esta es la segunda vesión de "My bop it app" la cuál implementa el uso de sonidos en la pantalla de juego, para poder llevarlos acabo se hizo uso de "Media player", que como su nombre indican reproducen sonidos. Se agregó un música de fondo, la cual aumenta dependiendo del tiempo que haya pasado en la actividad, a su vez se agregaron los botones de victoria y derrota la cuales reproducen susu sonidos correspondientes.
+Esta es la cuarta entrega de "My bop it app" la cual implementa la configuración de dificultad(Fácil, medio, difícil) a su vez se implementa el guardado persistente del puntaje para cada una de las dificultades, para poder realizar todo esto se hizo usoo de las "Shared preferences", en las cuales se guardaron cada uno de los valores incluso sin necesidad de mostrarlos en la actividad de preferencias.
 
 Links:
-Video: https://youtu.be/7JU1W4U99l4
-APK: https://drive.google.com/drive/folders/1Y5uaGSJ3QROtVFkzHaLOEsmk1JtIMWzT?usp=sharing
+Video: https://youtu.be/mxsu5sc3PVg
+APK: https://drive.google.com/drive/folders/18-CwuOJQYm686ZekXJMscX7XnZKaMPJh?usp=sharing
 

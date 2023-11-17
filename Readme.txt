@@ -5,3 +5,7 @@ Links:
 Video: https://youtu.be/mxsu5sc3PVg
 APK: https://drive.google.com/drive/folders/18-CwuOJQYm686ZekXJMscX7XnZKaMPJh?usp=sharing
 
+Link Uso de sensores primera versión (lab 3)
+Video: https://youtu.be/TO20X-nID5s
+APK: https://drive.google.com/drive/folders/1kfhTXHqh7ZY6JcZTIlljYT-3xGUrAT5z?usp=sharing
+
